@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import Any
 
 from engine.command_parser import Command
@@ -21,6 +22,10 @@ status / 状态：查看玩家状态
   示例：状态
 help / 帮助：显示帮助
   示例：帮助
+save / 保存：保存当前游戏
+  示例：保存
+load / 读取：读取存档
+  示例：读取
 quit / 退出：退出游戏
   示例：退出"""
 
@@ -28,9 +33,17 @@ quit / 退出：退出游戏
 class ActionHandler:
     """Execute parsed commands against the loaded world and player state."""
 
-    def __init__(self, world: dict[str, Any], player: Player) -> None:
+    def __init__(
+        self,
+        world: dict[str, Any],
+        player: Player,
+        save_callback: Callable[[], None],
+        load_callback: Callable[[], None],
+    ) -> None:
         self.world = world
         self.player = player
+        self.save_callback = save_callback
+        self.load_callback = load_callback
         self.locations_by_name = {location["name"]: location for location in world.get("locations", [])}
         self.npcs_by_id = {npc["id"]: npc for npc in world.get("npcs", [])}
         self.npcs_by_name = {npc["name"]: npc for npc in world.get("npcs", [])}
@@ -52,6 +65,10 @@ class ActionHandler:
             self.status()
         elif command.name == "help":
             print(HELP_TEXT)
+        elif command.name == "save":
+            self.save_callback()
+        elif command.name == "load":
+            self.load_callback()
         elif command.name == "quit":
             print("再会。")
             return False

@@ -19,6 +19,8 @@ class CommandParser:
         "状态": "status",
         "帮助": "help",
         "退出": "quit",
+        "保存": "save",
+        "读取": "load",
     }
 
     def parse(self, raw_command: str) -> Command:
