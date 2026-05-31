@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 class Player:
     name: str
     location: str
+    language: str = "zh"
     hp: int = 100
     bag: list[str] = field(default_factory=list)
     quests: list[dict[str, str]] = field(default_factory=list)

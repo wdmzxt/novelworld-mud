@@ -84,6 +84,9 @@ def _validate_locations(
             if field not in location:
                 errors.append(f"location {location_id} 缺少 {field}")
 
+        _validate_text_field(location, "name", f"location {location_id}", errors)
+        _validate_text_field(location, "description", f"location {location_id}", errors)
+
         exits = location.get("exits")
         location_npcs = location.get("npcs")
         location_items = location.get("items")
@@ -121,6 +124,15 @@ def _validate_npcs(npcs: dict[str, Any], errors: list[str]) -> None:
             if field not in npc:
                 errors.append(f"npc {npc_id} 缺少 {field}")
 
+        _validate_text_field(npc, "name", f"npc {npc_id}", errors)
+        _validate_text_field(npc, "description", f"npc {npc_id}", errors)
+        dialogue = npc.get("dialogue")
+        if "dialogue" in npc and not isinstance(dialogue, list):
+            errors.append(f"npc {npc_id} 的 dialogue 必须是 list")
+        elif isinstance(dialogue, list):
+            for line_index, line in enumerate(dialogue):
+                _validate_text_value(line, f"npc {npc_id} dialogue #{line_index}", errors)
+
 
 def _validate_items(items: dict[str, Any], errors: list[str]) -> None:
     for item_id, item in items.items():
@@ -131,6 +143,9 @@ def _validate_items(items: dict[str, Any], errors: list[str]) -> None:
         for field in REQUIRED_ITEM_FIELDS:
             if field not in item:
                 errors.append(f"item {item_id} 缺少 {field}")
+
+        _validate_text_field(item, "name", f"item {item_id}", errors)
+        _validate_text_field(item, "description", f"item {item_id}", errors)
 
 
 def _validate_quests(
@@ -149,6 +164,9 @@ def _validate_quests(
         for field in REQUIRED_QUEST_FIELDS:
             if field not in quest:
                 errors.append(f"{quest_label} 缺少 {field}")
+
+        for field in ["name", "objective", "reward_text"]:
+            _validate_text_field(quest, field, quest_label, errors)
 
         quest_id = quest.get("id")
         if not quest_id:
@@ -179,6 +197,9 @@ def _validate_events(events: list[Any], locations: dict[str, Any], errors: list[
             if field not in event:
                 errors.append(f"{event_label} 缺少 {field}")
 
+        for field in ["name", "location", "description"]:
+            _validate_text_field(event, field, event_label, errors)
+
         event_id = event.get("id")
         if not event_id:
             errors.append(f"{event_label} 的 id 不能为空")
@@ -193,3 +214,25 @@ def _entry_label(kind: str, index: int, entry: Any) -> str:
     if isinstance(entry, dict) and entry.get("id"):
         return f"{kind} {entry['id']}"
     return f"{kind} #{index}"
+
+
+def _validate_text_field(entry: dict[str, Any], field: str, label: str, errors: list[str]) -> None:
+    if field not in entry:
+        return
+    _validate_text_value(entry[field], f"{label} 的 {field}", errors)
+
+
+def _validate_text_value(value: Any, label: str, errors: list[str]) -> None:
+    if isinstance(value, str):
+        return
+    if isinstance(value, dict):
+        if "zh" not in value:
+            errors.append(f"{label} 缺少 zh")
+        if "en" not in value:
+            errors.append(f"{label} 缺少 en")
+        if "zh" in value and not isinstance(value["zh"], str):
+            errors.append(f"{label}.zh 必须是字符串")
+        if "en" in value and not isinstance(value["en"], str):
+            errors.append(f"{label}.en 必须是字符串")
+        return
+    errors.append(f"{label} 必须是字符串或包含 zh/en 的 dict")

@@ -5,8 +5,14 @@
   "locations": {
     "village_gate": {
       "id": "village_gate",
-      "name": "青石村村口",
-      "description": "斑驳的石碑立在村口，青苔沿着刻痕蔓延。村中小路通向村里，另一条荒僻山路绕向后山入口。",
+      "name": {
+        "zh": "青石村村口",
+        "en": "Qingshi Village Gate"
+      },
+      "description": {
+        "zh": "斑驳的石碑立在村口，青苔沿着刻痕蔓延。村中小路通向村里，另一条荒僻山路绕向后山入口。",
+        "en": "A weathered stone marker stands at the village gate, moss creeping through its carved grooves. Village Road leads inward, while a rough mountain path bends toward the back mountain entrance."
+      },
       "exits": {
         "村中小路": "village_road",
         "后山入口": "back_mountain"
@@ -16,10 +22,17 @@
     },
     "village_road": {
       "id": "village_road",
-      "name": "村中小路",
-      "description": "泥土路穿过低矮的屋舍，炊烟从屋顶缓缓升起。老村长常在路旁的槐树下等人，一把生锈短刀靠在槐树根旁。",
+      "name": {
+        "zh": "村中小路",
+        "en": "Village Road"
+      },
+      "description": {
+        "zh": "泥土路穿过低矮的屋舍，炊烟从屋顶缓缓升起。老村长常在路旁的槐树下等人，一把生锈短刀靠在槐树根旁。",
+        "en": "A dirt road winds past low houses as cooking smoke drifts from the rooftops. The old village chief often waits beneath the locust tree, where a rusty knife rests near the roots."
+      },
       "exits": {
         "青石村村口": "village_gate",
+        "后山入口": "back_mountain",
         "村长家": "chief_house",
         "荒草药田": "herb_field"
       },
@@ -28,8 +41,14 @@
     },
     "chief_house": {
       "id": "chief_house",
-      "name": "村长家",
-      "description": "木门半掩，屋内摆着旧桌和几卷发黄的村志。墙边斜靠着一支火把。",
+      "name": {
+        "zh": "村长家",
+        "en": "Chief's House"
+      },
+      "description": {
+        "zh": "木门半掩，屋内摆着旧桌和几卷发黄的村志。墙边斜靠着一支火把。",
+        "en": "The wooden door is half open. Inside are an old table and several yellowed village records. A torch leans against the wall."
+      },
       "exits": {
         "村中小路": "village_road"
       },
@@ -38,8 +57,14 @@
     },
     "herb_field": {
       "id": "herb_field",
-      "name": "荒草药田",
-      "description": "荒草几乎没过田埂，少量止血草还顽强地长在石缝边。采药人正在田边收拾竹篓。",
+      "name": {
+        "zh": "荒草药田",
+        "en": "Overgrown Herb Field"
+      },
+      "description": {
+        "zh": "荒草几乎没过田埂，少量止血草还顽强地长在石缝边。采药人正在田边收拾竹篓。",
+        "en": "Wild grass nearly covers the field ridges, though a few blood-staunching herbs still cling to the stones. The herb gatherer is sorting a bamboo basket nearby."
+      },
       "exits": {
         "村中小路": "village_road"
       },
@@ -48,8 +73,14 @@
     },
     "back_mountain": {
       "id": "back_mountain",
-      "name": "后山入口",
-      "description": "杂草遮住半条山径，林间传来断续的风声。更深处的树林被雾气遮住。",
+      "name": {
+        "zh": "后山入口",
+        "en": "Back Mountain Entrance"
+      },
+      "description": {
+        "zh": "杂草遮住半条山径，林间传来断续的风声。更深处的树林被雾气遮住。",
+        "en": "Weeds cover half the mountain trail, and broken gusts move through the trees. Deeper woods vanish behind a layer of mist."
+      },
       "exits": {
         "青石村村口": "village_gate",
         "后山深处": "deep_forest"
@@ -59,8 +90,14 @@
     },
     "deep_forest": {
       "id": "deep_forest",
-      "name": "后山深处",
-      "description": "树冠遮住天光，潮湿的腐叶铺满地面。路旁散落着一个被撕裂的竹篓。",
+      "name": {
+        "zh": "后山深处",
+        "en": "Deep Forest"
+      },
+      "description": {
+        "zh": "树冠遮住天光，潮湿的腐叶铺满地面。路旁散落着一个被撕裂的竹篓。",
+        "en": "The canopy blocks the daylight, and damp rotting leaves cover the ground. A torn bamboo basket lies beside the path."
+      },
       "exits": {
         "后山入口": "back_mountain",
         "山洞入口": "cave_entrance"
@@ -70,8 +107,14 @@
     },
     "cave_entrance": {
       "id": "cave_entrance",
-      "name": "山洞入口",
-      "description": "黑洞洞的山洞嵌在岩壁之间，冷风从洞里钻出，带着潮湿的腥味。",
+      "name": {
+        "zh": "山洞入口",
+        "en": "Cave Entrance"
+      },
+      "description": {
+        "zh": "黑洞洞的山洞嵌在岩壁之间，冷风从洞里钻出，带着潮湿的腥味。",
+        "en": "A dark cave opens in the rock face. Cold air seeps from within, carrying a damp, metallic smell."
+      },
       "exits": {
         "后山深处": "deep_forest"
       },
@@ -82,106 +125,208 @@
   "npcs": {
     "old_chief": {
       "id": "old_chief",
-      "name": "老村长",
-      "description": "须发皆白的老人，手里拄着一根磨得发亮的木杖。",
+      "name": {
+        "zh": "老村长",
+        "en": "Old Village Chief"
+      },
+      "description": {
+        "zh": "须发皆白的老人，手里拄着一根磨得发亮的木杖。",
+        "en": "An elderly man with white hair and beard, leaning on a polished wooden cane."
+      },
       "dialogue": [
-        "外乡人，后山近来不太平，若要上山，务必小心。"
+        {
+          "zh": "外乡人，后山近来不太平，若要上山，务必小心。",
+          "en": "Traveler, the back mountain has not been peaceful lately. If you go up there, be careful."
+        }
       ]
     },
     "herb_gatherer": {
       "id": "herb_gatherer",
-      "name": "采药人",
-      "description": "一个背着竹篓的中年人，衣角沾着泥土，似乎刚从山里回来。",
+      "name": {
+        "zh": "采药人",
+        "en": "Herb Gatherer"
+      },
+      "description": {
+        "zh": "一个背着竹篓的中年人，衣角沾着泥土，似乎刚从山里回来。",
+        "en": "A middle-aged gatherer with a bamboo basket on his back and mud on his clothes, as if he just returned from the hills."
+      },
       "dialogue": [
-        "后山深处最近有怪声，我原本想去采药，但远远看见林子里有黑影晃动。"
+        {
+          "zh": "后山深处最近有怪声，我原本想去采药，但远远看见林子里有黑影晃动。",
+          "en": "Strange sounds have been coming from the deep forest. I meant to gather herbs there, but I saw a dark shape moving among the trees."
+        }
       ]
     },
     "village_child": {
       "id": "village_child",
-      "name": "村中小孩",
-      "description": "一个瘦小的孩子，手里抓着半截木棍，眼神里满是好奇。",
+      "name": {
+        "zh": "村中小孩",
+        "en": "Village Child"
+      },
+      "description": {
+        "zh": "一个瘦小的孩子，手里抓着半截木棍，眼神里满是好奇。",
+        "en": "A thin child clutching half a wooden stick, eyes bright with curiosity."
+      },
       "dialogue": [
-        "我昨天看见有人进了后山，可是一直没有回来。"
+        {
+          "zh": "我昨天看见有人进了后山，可是一直没有回来。",
+          "en": "Yesterday I saw someone go into the back mountain, but they never came back."
+        }
       ]
     }
   },
   "items": {
     "rusty_knife": {
       "id": "rusty_knife",
-      "name": "生锈短刀",
-      "description": "刀刃布满锈迹，但握柄仍然结实。"
+      "name": {
+        "zh": "生锈短刀",
+        "en": "Rusty Knife"
+      },
+      "description": {
+        "zh": "刀刃布满锈迹，但握柄仍然结实。",
+        "en": "The blade is covered in rust, but the grip is still sturdy."
+      }
     },
     "village_chief_token": {
       "id": "village_chief_token",
-      "name": "村长的信物",
-      "description": "老村长交给你的木制信物，上面刻着青石村的纹样。"
+      "name": {
+        "zh": "村长的信物",
+        "en": "Village Chief's Token"
+      },
+      "description": {
+        "zh": "老村长交给你的木制信物，上面刻着青石村的纹样。",
+        "en": "A wooden token from the old village chief, carved with the pattern of Qingshi Village."
+      }
     },
     "torch": {
       "id": "torch",
-      "name": "火把",
-      "description": "一支用油布缠好的火把，适合在昏暗的山洞附近使用。"
+      "name": {
+        "zh": "火把",
+        "en": "Torch"
+      },
+      "description": {
+        "zh": "一支用油布缠好的火把，适合在昏暗的山洞附近使用。",
+        "en": "A torch wrapped in oiled cloth, useful near dark caves."
+      }
     },
     "healing_herb": {
       "id": "healing_herb",
-      "name": "止血草",
-      "description": "一株带有淡淡清香的草药，据说可以简单处理外伤。"
+      "name": {
+        "zh": "止血草",
+        "en": "Healing Herb"
+      },
+      "description": {
+        "zh": "一株带有淡淡清香的草药，据说可以简单处理外伤。",
+        "en": "A lightly fragrant herb said to help with minor wounds."
+      }
     },
     "broken_basket": {
       "id": "broken_basket",
-      "name": "破损竹篓",
-      "description": "一个被撕裂的竹篓，边缘还沾着暗红色的痕迹。"
+      "name": {
+        "zh": "破损竹篓",
+        "en": "Broken Basket"
+      },
+      "description": {
+        "zh": "一个被撕裂的竹篓，边缘还沾着暗红色的痕迹。",
+        "en": "A torn bamboo basket with dark red stains along its edge."
+      }
     }
   },
   "quests": [
     {
       "id": "investigate_mountain",
-      "name": "调查后山异响",
+      "name": {
+        "zh": "调查后山异响",
+        "en": "Investigate the Strange Sounds"
+      },
       "giver_npc": "old_chief",
       "trigger_type": "talk",
       "trigger_target": "old_chief",
-      "objective": "前往后山入口调查异响",
+      "objective": {
+        "zh": "前往后山入口调查异响",
+        "en": "Go to the back mountain entrance and investigate the strange sounds."
+      },
       "complete_type": "enter_location",
       "complete_target": "back_mountain",
       "reward_item": "village_chief_token",
-      "reward_text": "村长的信物"
+      "reward_text": {
+        "zh": "村长的信物",
+        "en": "Village Chief's Token"
+      }
     },
     {
       "id": "find_missing_gatherer",
-      "name": "寻找失踪的采药人",
+      "name": {
+        "zh": "寻找失踪的采药人",
+        "en": "Find the Missing Gatherer"
+      },
       "giver_npc": "herb_gatherer",
       "trigger_type": "talk",
       "trigger_target": "herb_gatherer",
-      "objective": "前往后山深处寻找失踪采药人的线索",
+      "objective": {
+        "zh": "前往后山深处寻找失踪采药人的线索",
+        "en": "Go to the deep forest and search for clues about the missing gatherer."
+      },
       "complete_type": "enter_location",
       "complete_target": "deep_forest",
       "reward_item": "healing_herb",
-      "reward_text": "止血草"
+      "reward_text": {
+        "zh": "止血草",
+        "en": "Healing Herb"
+      }
     }
   ],
   "events": [
     {
       "id": "find_claw_marks",
-      "name": "发现兽爪痕迹",
+      "name": {
+        "zh": "发现兽爪痕迹",
+        "en": "Claw Marks Found"
+      },
       "trigger_type": "enter_location",
       "trigger_target": "back_mountain",
-      "location": "后山入口",
-      "description": "你在泥地里发现了几道新鲜的兽爪印，爪痕很深，似乎不是普通野兽留下的。"
+      "location": {
+        "zh": "后山入口",
+        "en": "Back Mountain Entrance"
+      },
+      "description": {
+        "zh": "你在泥地里发现了几道新鲜的兽爪印，爪痕很深，似乎不是普通野兽留下的。",
+        "en": "You find several fresh claw marks in the mud. They are deep, and they do not look like they were made by an ordinary beast."
+      }
     },
     {
       "id": "hear_beast_roar",
-      "name": "听见低沉兽吼",
+      "name": {
+        "zh": "听见低沉兽吼",
+        "en": "Low Beast Roar"
+      },
       "trigger_type": "enter_location",
       "trigger_target": "deep_forest",
-      "location": "后山深处",
-      "description": "林间忽然传来一声低沉的兽吼，惊起一片飞鸟。你感觉空气里多了一股腥冷的气息。"
+      "location": {
+        "zh": "后山深处",
+        "en": "Deep Forest"
+      },
+      "description": {
+        "zh": "林间忽然传来一声低沉的兽吼，惊起一片飞鸟。你感觉空气里多了一股腥冷的气息。",
+        "en": "A low beastly roar rolls through the forest, startling a flock of birds into the air. The air turns cold and foul."
+      }
     },
     {
       "id": "find_blood_trace",
-      "name": "发现血迹",
+      "name": {
+        "zh": "发现血迹",
+        "en": "Blood Trace Found"
+      },
       "trigger_type": "enter_location",
       "trigger_target": "cave_entrance",
-      "location": "山洞入口",
-      "description": "山洞入口的石缝间残留着暗红色血迹，旁边还有被拖拽过的痕迹。"
+      "location": {
+        "zh": "山洞入口",
+        "en": "Cave Entrance"
+      },
+      "description": {
+        "zh": "山洞入口的石缝间残留着暗红色血迹，旁边还有被拖拽过的痕迹。",
+        "en": "Dark red blood remains in the cracks near the cave entrance, with drag marks beside it."
+      }
     }
   ]
 }

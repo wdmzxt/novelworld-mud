@@ -19,6 +19,7 @@ def save_game(player: Player, world: dict[str, Any]) -> None:
             "name": player.name,
             "hp": player.hp,
             "location": player.location,
+            "language": player.language,
             "bag": player.bag,
             "quests": player.quests,
             "events": player.events,
@@ -45,6 +46,7 @@ def load_game() -> tuple[Player, dict[str, Any]]:
         player = Player(
             name=player_data["name"],
             location=player_data["location"],
+            language=player_data.get("language", "zh"),
             hp=player_data["hp"],
             bag=list(player_data.get("bag", [])),
             quests=list(player_data.get("quests", [])),
