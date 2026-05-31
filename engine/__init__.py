@@ -1,0 +1,1 @@
+"""NovelWorld MUD engine package."""

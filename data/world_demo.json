@@ -1,0 +1,55 @@
+{
+  "id": "qingshi_village_demo",
+  "name": "青石村 Demo 世界",
+  "start_location": "村中小路",
+  "locations": [
+    {
+      "id": "village_gate",
+      "name": "青石村村口",
+      "description": "斑驳的石碑立在村口，青苔沿着刻痕蔓延。村中小路向北延伸，远处能看见后山的轮廓。",
+      "exits": {
+        "村中小路": "village_path"
+      },
+      "npcs": [],
+      "items": []
+    },
+    {
+      "id": "village_path",
+      "name": "村中小路",
+      "description": "泥土路穿过低矮的屋舍，炊烟从屋顶缓缓升起。老村长常在路旁的槐树下等人，一把生锈短刀靠在槐树根旁。",
+      "exits": {
+        "青石村村口": "village_gate",
+        "后山入口": "mountain_entrance"
+      },
+      "npcs": ["elder"],
+      "items": ["rusty_short_sword"]
+    },
+    {
+      "id": "mountain_entrance",
+      "name": "后山入口",
+      "description": "杂草遮住半条山径，林间传来断续的风声。更深处的树林被雾气遮住。",
+      "exits": {
+        "村中小路": "village_path"
+      },
+      "npcs": [],
+      "items": []
+    }
+  ],
+  "npcs": [
+    {
+      "id": "elder",
+      "name": "老村长",
+      "description": "须发皆白的老人，手里拄着一根磨得发亮的木杖。",
+      "dialogue": [
+        "外乡人，后山近来不太平，若要上山，务必小心。"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "rusty_short_sword",
+      "name": "生锈短刀",
+      "description": "刀刃布满锈迹，但握柄仍然结实。"
+    }
+  ]
+}
