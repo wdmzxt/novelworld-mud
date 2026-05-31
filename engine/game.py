@@ -10,13 +10,13 @@ class Game:
 
     def __init__(self) -> None:
         self.world = load_demo_world()
-        self.player = Player(name="旅人", location=self.world["start_location"])
+        self.player = Player(name="旅人", location=self.world["locations"][self.world["start_location"]]["name"])
         self.parser = CommandParser()
         self.actions = self._create_action_handler()
         self.running = True
 
     def run(self) -> None:
-        print("NovelWorld MUD v0.5")
+        print("NovelWorld MUD v0.6")
         print("将小说变成可游玩的本地文字冒险世界。")
         print("输入 help 或 帮助 查看命令。")
 

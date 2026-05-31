@@ -5,6 +5,8 @@ def main() -> None:
     try:
         game = Game()
         game.run()
+    except ValueError as exc:
+        print(exc)
     except RuntimeError as exc:
         print(f"启动失败：{exc}")
 

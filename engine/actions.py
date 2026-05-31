@@ -34,24 +34,6 @@ quit / 退出：退出游戏
   示例：退出"""
 
 
-INVESTIGATE_MOUNTAIN_QUEST = {
-    "id": "investigate_mountain",
-    "name": "调查后山异响",
-    "status": "进行中",
-    "giver": "老村长",
-    "objective": "前往后山入口调查异响",
-    "reward": "村长的信物",
-}
-
-
-FIND_CLAW_MARKS_EVENT = {
-    "id": "find_claw_marks",
-    "name": "发现兽爪痕迹",
-    "location": "后山入口",
-    "description": "你在泥地里发现了几道新鲜的兽爪印，爪痕很深，似乎不是普通野兽留下的。",
-}
-
-
 class ActionHandler:
     """Execute parsed commands against the loaded world and player state."""
 
@@ -66,11 +48,15 @@ class ActionHandler:
         self.player = player
         self.save_callback = save_callback
         self.load_callback = load_callback
-        self.locations_by_name = {location["name"]: location for location in world.get("locations", [])}
-        self.npcs_by_id = {npc["id"]: npc for npc in world.get("npcs", [])}
-        self.npcs_by_name = {npc["name"]: npc for npc in world.get("npcs", [])}
-        self.items_by_id = {item["id"]: item for item in world.get("items", [])}
-        self.items_by_name = {item["name"]: item for item in world.get("items", [])}
+        self.locations_by_id = world.get("locations", {})
+        self.locations_by_name = {
+            location["name"]: location for location in self.locations_by_id.values()
+        }
+        self.npcs_by_id = world.get("npcs", {})
+        self.npcs_by_name = {npc["name"]: npc for npc in self.npcs_by_id.values()}
+        self.items_by_id = world.get("items", {})
+        self.items_by_name = {item["name"]: item for item in self.items_by_id.values()}
+        self.quests_by_id = {quest["id"]: quest for quest in world.get("quests", [])}
 
     def execute(self, command: Command) -> bool:
         if command.name == "look":
@@ -127,8 +113,7 @@ class ActionHandler:
             return
 
         location = self._current_location()
-        exits = location.get("exits", {})
-        target_id = exits.get(target_name)
+        target_id = location.get("exits", {}).get(target_name)
 
         if not target_id:
             print(f"目标地点不存在或不在出口中：{target_name}")
@@ -141,8 +126,8 @@ class ActionHandler:
 
         self.player.location = target_location["name"]
         print(f"你来到：{self.player.location}")
-        self._trigger_find_claw_marks_if_ready()
-        self._complete_investigate_mountain_if_ready()
+        self._trigger_enter_location_events(target_id)
+        self._complete_enter_location_quests(target_id)
         self.look()
 
     def talk(self, npc_name: str | None) -> None:
@@ -159,8 +144,7 @@ class ActionHandler:
         for line in npc.get("dialogue", ["他没有什么要说的。"]):
             print(line)
 
-        if npc["name"] == "老村长":
-            self._accept_investigate_mountain()
+        self._accept_talk_quests(npc["id"])
 
     def take(self, item_name: str | None) -> None:
         if not item_name:
@@ -217,10 +201,7 @@ class ActionHandler:
         return location
 
     def _location_by_id(self, location_id: str) -> dict[str, Any] | None:
-        for location in self.world.get("locations", []):
-            if location.get("id") == location_id:
-                return location
-        return None
+        return self.locations_by_id.get(location_id)
 
     def _npc_name(self, npc_id: str) -> str:
         return self.npcs_by_id.get(npc_id, {}).get("name", npc_id)
@@ -237,26 +218,55 @@ class ActionHandler:
     def _format_list(self, values: list[str]) -> str:
         return "、".join(values) if values else "无"
 
-    def _accept_investigate_mountain(self) -> None:
-        if self._find_quest("investigate_mountain"):
-            return
+    def _accept_talk_quests(self, npc_id: str) -> None:
+        for quest_config in self.world.get("quests", []):
+            if quest_config.get("trigger_type") != "talk":
+                continue
+            if quest_config.get("trigger_target") != npc_id:
+                continue
+            if self._find_quest(quest_config["id"]):
+                continue
 
-        self.player.quests.append(dict(INVESTIGATE_MOUNTAIN_QUEST))
-        print("你接取了任务：调查后山异响。")
+            quest = self._build_player_quest(quest_config)
+            self.player.quests.append(quest)
+            print(f"你接取了任务：{quest['name']}。")
 
-    def _complete_investigate_mountain_if_ready(self) -> None:
-        if self.player.location != "后山入口":
-            return
+    def _complete_enter_location_quests(self, location_id: str) -> None:
+        for quest in self.player.quests:
+            if quest.get("status") != "进行中":
+                continue
 
-        quest = self._find_quest("investigate_mountain")
-        if not quest or quest.get("status") != "进行中":
-            return
+            quest_config = self.quests_by_id.get(quest["id"], {})
+            if quest_config.get("complete_type") != "enter_location":
+                continue
+            if quest_config.get("complete_target") != location_id:
+                continue
 
-        quest["status"] = "已完成"
-        reward = quest["reward"]
-        if reward not in self.player.bag:
-            self.player.bag.append(reward)
-        print("你完成了任务：调查后山异响。你获得了：村长的信物。")
+            quest["status"] = "已完成"
+            reward_item_id = quest_config.get("reward_item", "")
+            reward_name = self._item_name(reward_item_id)
+            quest["reward"] = reward_name
+            if reward_name and reward_name not in self.player.bag:
+                self.player.bag.append(reward_name)
+            print(f"你完成了任务：{quest['name']}。你获得了：{reward_name}。")
+
+    def _trigger_enter_location_events(self, location_id: str) -> None:
+        for event_config in self.world.get("events", []):
+            if event_config.get("trigger_type") != "enter_location":
+                continue
+            if event_config.get("trigger_target") != location_id:
+                continue
+            if self._find_event(event_config["id"]):
+                continue
+
+            event = {
+                "id": event_config["id"],
+                "name": event_config["name"],
+                "location": event_config.get("location", self.player.location),
+                "description": event_config.get("description", ""),
+            }
+            self.player.events.append(event)
+            print(event["description"])
 
     def _find_quest(self, quest_id: str) -> dict[str, str] | None:
         for quest in self.player.quests:
@@ -264,19 +274,19 @@ class ActionHandler:
                 return quest
         return None
 
-    def _trigger_find_claw_marks_if_ready(self) -> None:
-        if self.player.location != "后山入口":
-            return
-
-        if self._find_event("find_claw_marks"):
-            return
-
-        event = dict(FIND_CLAW_MARKS_EVENT)
-        self.player.events.append(event)
-        print(event["description"])
-
     def _find_event(self, event_id: str) -> dict[str, str] | None:
         for event in self.player.events:
             if event.get("id") == event_id:
                 return event
         return None
+
+    def _build_player_quest(self, quest_config: dict[str, Any]) -> dict[str, str]:
+        return {
+            "id": quest_config["id"],
+            "name": quest_config["name"],
+            "status": "进行中",
+            "giver": self._npc_name(quest_config.get("giver_npc", "")),
+            "objective": quest_config.get("objective", ""),
+            "reward": self._item_name(quest_config.get("reward_item", "")),
+            "reward_item": quest_config.get("reward_item", ""),
+        }

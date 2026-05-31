@@ -1,9 +1,9 @@
 {
   "id": "qingshi_village_demo",
   "name": "青石村 Demo 世界",
-  "start_location": "村中小路",
-  "locations": [
-    {
+  "start_location": "village_path",
+  "locations": {
+    "village_gate": {
       "id": "village_gate",
       "name": "青石村村口",
       "description": "斑驳的石碑立在村口，青苔沿着刻痕蔓延。村中小路向北延伸，远处能看见后山的轮廓。",
@@ -13,19 +13,19 @@
       "npcs": [],
       "items": []
     },
-    {
+    "village_path": {
       "id": "village_path",
       "name": "村中小路",
       "description": "泥土路穿过低矮的屋舍，炊烟从屋顶缓缓升起。老村长常在路旁的槐树下等人，一把生锈短刀靠在槐树根旁。",
       "exits": {
         "青石村村口": "village_gate",
-        "后山入口": "mountain_entrance"
+        "后山入口": "back_mountain"
       },
-      "npcs": ["elder"],
+      "npcs": ["old_chief"],
       "items": ["rusty_short_sword"]
     },
-    {
-      "id": "mountain_entrance",
+    "back_mountain": {
+      "id": "back_mountain",
       "name": "后山入口",
       "description": "杂草遮住半条山径，林间传来断续的风声。更深处的树林被雾气遮住。",
       "exits": {
@@ -34,22 +34,51 @@
       "npcs": [],
       "items": []
     }
-  ],
-  "npcs": [
-    {
-      "id": "elder",
+  },
+  "npcs": {
+    "old_chief": {
+      "id": "old_chief",
       "name": "老村长",
       "description": "须发皆白的老人，手里拄着一根磨得发亮的木杖。",
       "dialogue": [
         "外乡人，后山近来不太平，若要上山，务必小心。"
       ]
     }
-  ],
-  "items": [
-    {
+  },
+  "items": {
+    "rusty_short_sword": {
       "id": "rusty_short_sword",
       "name": "生锈短刀",
       "description": "刀刃布满锈迹，但握柄仍然结实。"
+    },
+    "village_chief_token": {
+      "id": "village_chief_token",
+      "name": "村长的信物",
+      "description": "老村长交给你的木制信物，上面刻着青石村的纹样。"
+    }
+  },
+  "quests": [
+    {
+      "id": "investigate_mountain",
+      "name": "调查后山异响",
+      "giver_npc": "old_chief",
+      "trigger_type": "talk",
+      "trigger_target": "old_chief",
+      "objective": "前往后山入口调查异响",
+      "complete_type": "enter_location",
+      "complete_target": "back_mountain",
+      "reward_item": "village_chief_token",
+      "reward_text": "村长的信物"
+    }
+  ],
+  "events": [
+    {
+      "id": "find_claw_marks",
+      "name": "发现兽爪痕迹",
+      "trigger_type": "enter_location",
+      "trigger_target": "back_mountain",
+      "location": "后山入口",
+      "description": "你在泥地里发现了几道新鲜的兽爪印，爪痕很深，似乎不是普通野兽留下的。"
     }
   ]
 }

@@ -41,7 +41,7 @@ def load_game() -> tuple[Player, dict[str, Any]]:
 
     try:
         player_data = save_data["player"]
-        world = save_data["world"]
+        world = _normalize_loaded_world(save_data["world"])
         player = Player(
             name=player_data["name"],
             location=player_data["location"],
@@ -54,3 +54,19 @@ def load_game() -> tuple[Player, dict[str, Any]]:
         raise RuntimeError("存档文件内容不完整或已损坏。") from exc
 
     return player, world
+
+
+def _normalize_loaded_world(world: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(world, dict):
+        return world
+
+    if isinstance(world.get("locations"), list):
+        world["locations"] = {location["id"]: location for location in world["locations"] if isinstance(location, dict)}
+    if isinstance(world.get("npcs"), list):
+        world["npcs"] = {npc["id"]: npc for npc in world["npcs"] if isinstance(npc, dict)}
+    if isinstance(world.get("items"), list):
+        world["items"] = {item["id"]: item for item in world["items"] if isinstance(item, dict)}
+
+    world.setdefault("quests", [])
+    world.setdefault("events", [])
+    return world
