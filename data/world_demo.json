@@ -1,35 +1,79 @@
 {
   "id": "qingshi_village_demo",
   "name": "青石村 Demo 世界",
-  "start_location": "village_path",
+  "start_location": "village_gate",
   "locations": {
     "village_gate": {
       "id": "village_gate",
       "name": "青石村村口",
-      "description": "斑驳的石碑立在村口，青苔沿着刻痕蔓延。村中小路向北延伸，远处能看见后山的轮廓。",
+      "description": "斑驳的石碑立在村口，青苔沿着刻痕蔓延。村中小路通向村里，另一条荒僻山路绕向后山入口。",
       "exits": {
-        "村中小路": "village_path"
+        "村中小路": "village_road",
+        "后山入口": "back_mountain"
       },
-      "npcs": [],
+      "npcs": ["village_child"],
       "items": []
     },
-    "village_path": {
-      "id": "village_path",
+    "village_road": {
+      "id": "village_road",
       "name": "村中小路",
       "description": "泥土路穿过低矮的屋舍，炊烟从屋顶缓缓升起。老村长常在路旁的槐树下等人，一把生锈短刀靠在槐树根旁。",
       "exits": {
         "青石村村口": "village_gate",
-        "后山入口": "back_mountain"
+        "村长家": "chief_house",
+        "荒草药田": "herb_field"
       },
       "npcs": ["old_chief"],
-      "items": ["rusty_short_sword"]
+      "items": ["rusty_knife"]
+    },
+    "chief_house": {
+      "id": "chief_house",
+      "name": "村长家",
+      "description": "木门半掩，屋内摆着旧桌和几卷发黄的村志。墙边斜靠着一支火把。",
+      "exits": {
+        "村中小路": "village_road"
+      },
+      "npcs": [],
+      "items": ["torch"]
+    },
+    "herb_field": {
+      "id": "herb_field",
+      "name": "荒草药田",
+      "description": "荒草几乎没过田埂，少量止血草还顽强地长在石缝边。采药人正在田边收拾竹篓。",
+      "exits": {
+        "村中小路": "village_road"
+      },
+      "npcs": ["herb_gatherer"],
+      "items": ["healing_herb"]
     },
     "back_mountain": {
       "id": "back_mountain",
       "name": "后山入口",
       "description": "杂草遮住半条山径，林间传来断续的风声。更深处的树林被雾气遮住。",
       "exits": {
-        "村中小路": "village_path"
+        "青石村村口": "village_gate",
+        "后山深处": "deep_forest"
+      },
+      "npcs": [],
+      "items": []
+    },
+    "deep_forest": {
+      "id": "deep_forest",
+      "name": "后山深处",
+      "description": "树冠遮住天光，潮湿的腐叶铺满地面。路旁散落着一个被撕裂的竹篓。",
+      "exits": {
+        "后山入口": "back_mountain",
+        "山洞入口": "cave_entrance"
+      },
+      "npcs": [],
+      "items": ["broken_basket"]
+    },
+    "cave_entrance": {
+      "id": "cave_entrance",
+      "name": "山洞入口",
+      "description": "黑洞洞的山洞嵌在岩壁之间，冷风从洞里钻出，带着潮湿的腥味。",
+      "exits": {
+        "后山深处": "deep_forest"
       },
       "npcs": [],
       "items": []
@@ -43,11 +87,27 @@
       "dialogue": [
         "外乡人，后山近来不太平，若要上山，务必小心。"
       ]
+    },
+    "herb_gatherer": {
+      "id": "herb_gatherer",
+      "name": "采药人",
+      "description": "一个背着竹篓的中年人，衣角沾着泥土，似乎刚从山里回来。",
+      "dialogue": [
+        "后山深处最近有怪声，我原本想去采药，但远远看见林子里有黑影晃动。"
+      ]
+    },
+    "village_child": {
+      "id": "village_child",
+      "name": "村中小孩",
+      "description": "一个瘦小的孩子，手里抓着半截木棍，眼神里满是好奇。",
+      "dialogue": [
+        "我昨天看见有人进了后山，可是一直没有回来。"
+      ]
     }
   },
   "items": {
-    "rusty_short_sword": {
-      "id": "rusty_short_sword",
+    "rusty_knife": {
+      "id": "rusty_knife",
       "name": "生锈短刀",
       "description": "刀刃布满锈迹，但握柄仍然结实。"
     },
@@ -55,6 +115,21 @@
       "id": "village_chief_token",
       "name": "村长的信物",
       "description": "老村长交给你的木制信物，上面刻着青石村的纹样。"
+    },
+    "torch": {
+      "id": "torch",
+      "name": "火把",
+      "description": "一支用油布缠好的火把，适合在昏暗的山洞附近使用。"
+    },
+    "healing_herb": {
+      "id": "healing_herb",
+      "name": "止血草",
+      "description": "一株带有淡淡清香的草药，据说可以简单处理外伤。"
+    },
+    "broken_basket": {
+      "id": "broken_basket",
+      "name": "破损竹篓",
+      "description": "一个被撕裂的竹篓，边缘还沾着暗红色的痕迹。"
     }
   },
   "quests": [
@@ -69,6 +144,18 @@
       "complete_target": "back_mountain",
       "reward_item": "village_chief_token",
       "reward_text": "村长的信物"
+    },
+    {
+      "id": "find_missing_gatherer",
+      "name": "寻找失踪的采药人",
+      "giver_npc": "herb_gatherer",
+      "trigger_type": "talk",
+      "trigger_target": "herb_gatherer",
+      "objective": "前往后山深处寻找失踪采药人的线索",
+      "complete_type": "enter_location",
+      "complete_target": "deep_forest",
+      "reward_item": "healing_herb",
+      "reward_text": "止血草"
     }
   ],
   "events": [
@@ -79,6 +166,22 @@
       "trigger_target": "back_mountain",
       "location": "后山入口",
       "description": "你在泥地里发现了几道新鲜的兽爪印，爪痕很深，似乎不是普通野兽留下的。"
+    },
+    {
+      "id": "hear_beast_roar",
+      "name": "听见低沉兽吼",
+      "trigger_type": "enter_location",
+      "trigger_target": "deep_forest",
+      "location": "后山深处",
+      "description": "林间忽然传来一声低沉的兽吼，惊起一片飞鸟。你感觉空气里多了一股腥冷的气息。"
+    },
+    {
+      "id": "find_blood_trace",
+      "name": "发现血迹",
+      "trigger_type": "enter_location",
+      "trigger_target": "cave_entrance",
+      "location": "山洞入口",
+      "description": "山洞入口的石缝间残留着暗红色血迹，旁边还有被拖拽过的痕迹。"
     }
   ]
 }

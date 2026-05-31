@@ -246,7 +246,7 @@ class ActionHandler:
             reward_item_id = quest_config.get("reward_item", "")
             reward_name = self._item_name(reward_item_id)
             quest["reward"] = reward_name
-            if reward_name and reward_name not in self.player.bag:
+            if reward_name:
                 self.player.bag.append(reward_name)
             print(f"你完成了任务：{quest['name']}。你获得了：{reward_name}。")
 
