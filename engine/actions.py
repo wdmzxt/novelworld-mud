@@ -6,15 +6,23 @@ from engine.command_parser import Command
 from engine.player import Player
 
 
-HELP_TEXT = """可用命令：
-look：查看当前位置
-go <地点>：移动到指定地点
-talk <人物>：和人物对话
-take <物品>：拾取物品
-bag：查看背包
-status：查看角色状态
-help：显示帮助
-quit：退出游戏"""
+HELP_TEXT = """可用命令与示例：
+look / 查看：查看当前位置
+  示例：查看
+go <地点> / 去 <地点>：移动到指定地点
+  示例：去 后山入口
+talk <人物> / 对话 <人物>：和人物对话
+  示例：对话 老村长
+take <物品> / 拾取 <物品>：拾取当前位置的物品
+  示例：拾取 生锈短刀
+bag / 背包：查看背包
+  示例：背包
+status / 状态：查看玩家状态
+  示例：状态
+help / 帮助：显示帮助
+  示例：帮助
+quit / 退出：退出游戏
+  示例：退出"""
 
 
 class ActionHandler:
@@ -54,16 +62,22 @@ class ActionHandler:
 
     def look(self) -> None:
         location = self._current_location()
-        print(f"\n{location['name']}")
-        print(location.get("description", "这里没有特别的描述。"))
 
         npcs = [self._npc_name(npc_id) for npc_id in location.get("npcs", [])]
         items = [self._item_name(item_id) for item_id in location.get("items", [])]
         exits = list(location.get("exits", {}).keys())
 
-        print(f"人物：{self._format_list(npcs)}")
-        print(f"物品：{self._format_list(items)}")
-        print(f"出口：{self._format_list(exits)}")
+        print()
+        print("当前位置")
+        print(f"  {location['name']}")
+        print("描述")
+        print(f"  {location.get('description', '这里没有特别的描述。')}")
+        print("人物")
+        print(f"  {self._format_list(npcs)}")
+        print("物品")
+        print(f"  {self._format_list(items)}")
+        print("出口")
+        print(f"  {self._format_list(exits)}")
 
     def go(self, target_name: str | None) -> None:
         if not target_name:
@@ -121,6 +135,7 @@ class ActionHandler:
         print(f"姓名：{self.player.name}")
         print(f"生命值：{self.player.hp}")
         print(f"当前位置：{self.player.location}")
+        print(f"背包数量：{len(self.player.bag)}")
 
     def _current_location(self) -> dict[str, Any]:
         location = self.locations_by_name.get(self.player.location)

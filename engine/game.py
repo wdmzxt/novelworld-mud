@@ -15,8 +15,9 @@ class Game:
         self.running = True
 
     def run(self) -> None:
-        print("NovelWorld MUD v0.1")
-        print("输入 help 查看命令。")
+        print("NovelWorld MUD v0.1.1")
+        print("将小说变成可游玩的本地文字冒险世界。")
+        print("输入 help 或 帮助 查看命令。")
         self.actions.look()
 
         while self.running:
