@@ -20,6 +20,7 @@ def save_game(player: Player, world: dict[str, Any]) -> None:
             "hp": player.hp,
             "location": player.location,
             "bag": player.bag,
+            "quests": player.quests,
         },
         "world": world,
     }
@@ -45,6 +46,7 @@ def load_game() -> tuple[Player, dict[str, Any]]:
             location=player_data["location"],
             hp=player_data["hp"],
             bag=list(player_data.get("bag", [])),
+            quests=list(player_data.get("quests", [])),
         )
     except (KeyError, TypeError) as exc:
         raise RuntimeError("存档文件内容不完整或已损坏。") from exc

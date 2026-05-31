@@ -7,3 +7,4 @@ class Player:
     location: str
     hp: int = 100
     bag: list[str] = field(default_factory=list)
+    quests: list[dict[str, str]] = field(default_factory=list)

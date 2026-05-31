@@ -26,8 +26,20 @@ save / 保存：保存当前游戏
   示例：保存
 load / 读取：读取存档
   示例：读取
+quests / 任务：查看当前任务
+  示例：任务
 quit / 退出：退出游戏
   示例：退出"""
+
+
+INVESTIGATE_MOUNTAIN_QUEST = {
+    "id": "investigate_mountain",
+    "name": "调查后山异响",
+    "status": "进行中",
+    "giver": "老村长",
+    "objective": "前往后山入口调查异响",
+    "reward": "村长的信物",
+}
 
 
 class ActionHandler:
@@ -63,6 +75,8 @@ class ActionHandler:
             self.bag()
         elif command.name == "status":
             self.status()
+        elif command.name == "quests":
+            self.quests()
         elif command.name == "help":
             print(HELP_TEXT)
         elif command.name == "save":
@@ -115,6 +129,7 @@ class ActionHandler:
 
         self.player.location = target_location["name"]
         print(f"你来到：{self.player.location}")
+        self._complete_investigate_mountain_if_ready()
         self.look()
 
     def talk(self, npc_name: str | None) -> None:
@@ -130,6 +145,9 @@ class ActionHandler:
         print(f"{npc['name']}：")
         for line in npc.get("dialogue", ["他没有什么要说的。"]):
             print(line)
+
+        if npc["name"] == "老村长":
+            self._accept_investigate_mountain()
 
     def take(self, item_name: str | None) -> None:
         if not item_name:
@@ -153,6 +171,19 @@ class ActionHandler:
         print(f"生命值：{self.player.hp}")
         print(f"当前位置：{self.player.location}")
         print(f"背包数量：{len(self.player.bag)}")
+        print(f"任务数量：{len(self.player.quests)}")
+
+    def quests(self) -> None:
+        if not self.player.quests:
+            print("当前没有任务。")
+            return
+
+        print("当前任务：")
+        for quest in self.player.quests:
+            print(f"- {quest['name']} [{quest['status']}]")
+            print(f"  发布者：{quest['giver']}")
+            print(f"  目标：{quest['objective']}")
+            print(f"  奖励：{quest['reward']}")
 
     def _current_location(self) -> dict[str, Any]:
         location = self.locations_by_name.get(self.player.location)
@@ -180,3 +211,30 @@ class ActionHandler:
 
     def _format_list(self, values: list[str]) -> str:
         return "、".join(values) if values else "无"
+
+    def _accept_investigate_mountain(self) -> None:
+        if self._find_quest("investigate_mountain"):
+            return
+
+        self.player.quests.append(dict(INVESTIGATE_MOUNTAIN_QUEST))
+        print("你接取了任务：调查后山异响。")
+
+    def _complete_investigate_mountain_if_ready(self) -> None:
+        if self.player.location != "后山入口":
+            return
+
+        quest = self._find_quest("investigate_mountain")
+        if not quest or quest.get("status") != "进行中":
+            return
+
+        quest["status"] = "已完成"
+        reward = quest["reward"]
+        if reward not in self.player.bag:
+            self.player.bag.append(reward)
+        print("你完成了任务：调查后山异响。你获得了：村长的信物。")
+
+    def _find_quest(self, quest_id: str) -> dict[str, str] | None:
+        for quest in self.player.quests:
+            if quest.get("id") == quest_id:
+                return quest
+        return None
