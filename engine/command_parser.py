@@ -22,6 +22,7 @@ class CommandParser:
         "保存": "save",
         "读取": "load",
         "任务": "quests",
+        "事件": "events",
     }
 
     def parse(self, raw_command: str) -> Command:

@@ -28,6 +28,8 @@ load / 读取：读取存档
   示例：读取
 quests / 任务：查看当前任务
   示例：任务
+events / 事件：查看已触发事件
+  示例：事件
 quit / 退出：退出游戏
   示例：退出"""
 
@@ -39,6 +41,14 @@ INVESTIGATE_MOUNTAIN_QUEST = {
     "giver": "老村长",
     "objective": "前往后山入口调查异响",
     "reward": "村长的信物",
+}
+
+
+FIND_CLAW_MARKS_EVENT = {
+    "id": "find_claw_marks",
+    "name": "发现兽爪痕迹",
+    "location": "后山入口",
+    "description": "你在泥地里发现了几道新鲜的兽爪印，爪痕很深，似乎不是普通野兽留下的。",
 }
 
 
@@ -77,6 +87,8 @@ class ActionHandler:
             self.status()
         elif command.name == "quests":
             self.quests()
+        elif command.name == "events":
+            self.events()
         elif command.name == "help":
             print(HELP_TEXT)
         elif command.name == "save":
@@ -129,6 +141,7 @@ class ActionHandler:
 
         self.player.location = target_location["name"]
         print(f"你来到：{self.player.location}")
+        self._trigger_find_claw_marks_if_ready()
         self._complete_investigate_mountain_if_ready()
         self.look()
 
@@ -172,6 +185,7 @@ class ActionHandler:
         print(f"当前位置：{self.player.location}")
         print(f"背包数量：{len(self.player.bag)}")
         print(f"任务数量：{len(self.player.quests)}")
+        print(f"已触发事件数量：{len(self.player.events)}")
 
     def quests(self) -> None:
         if not self.player.quests:
@@ -184,6 +198,17 @@ class ActionHandler:
             print(f"  发布者：{quest['giver']}")
             print(f"  目标：{quest['objective']}")
             print(f"  奖励：{quest['reward']}")
+
+    def events(self) -> None:
+        if not self.player.events:
+            print("当前没有已触发事件。")
+            return
+
+        print("已触发事件：")
+        for event in self.player.events:
+            print(f"- {event['name']}")
+            print(f"  地点：{event['location']}")
+            print(f"  描述：{event['description']}")
 
     def _current_location(self) -> dict[str, Any]:
         location = self.locations_by_name.get(self.player.location)
@@ -237,4 +262,21 @@ class ActionHandler:
         for quest in self.player.quests:
             if quest.get("id") == quest_id:
                 return quest
+        return None
+
+    def _trigger_find_claw_marks_if_ready(self) -> None:
+        if self.player.location != "后山入口":
+            return
+
+        if self._find_event("find_claw_marks"):
+            return
+
+        event = dict(FIND_CLAW_MARKS_EVENT)
+        self.player.events.append(event)
+        print(event["description"])
+
+    def _find_event(self, event_id: str) -> dict[str, str] | None:
+        for event in self.player.events:
+            if event.get("id") == event_id:
+                return event
         return None
